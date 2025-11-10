@@ -2,24 +2,21 @@
 
 pragma solidity ^0.8.24;
 
-import {Test , console} from "forge-std/Test.sol";
+import {Test, console} from "forge-std/Test.sol";
 import {RebaseToken} from "../src/RebaseToken.sol";
 import {Vault} from "../src/Vault.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
 
-
-
 import {IRebaseToken} from "../src/Interfaces/IRebaseToken.sol";
 
 contract RebaseTokenTest is Test {
-
     RebaseToken private rebaseToken;
     Vault private vault;
 
     address public owner = makeAddr("owner");
     address public user = makeAddr("user");
-    uint256  public constant FUND_VAULT = 1e18;
+    uint256 public constant FUND_VAULT = 1e18;
     uint256 public SEND_VALUE = 1e5;
 
     function setUp() external {
@@ -27,18 +24,18 @@ contract RebaseTokenTest is Test {
         rebaseToken = new RebaseToken();
         vault = new Vault(address(rebaseToken));
         rebaseToken.grantMintAndBurnRole(address(vault));
-      (bool sucess,) = payable(address(vault)).call{value: FUND_VAULT}("");
+        (bool sucess,) = payable(address(vault)).call{value: FUND_VAULT}("");
         vm.stopPrank();
     }
 
-     function addRewardsToVault(uint256 rewardAmount) public {
+    function addRewardsToVault(uint256 rewardAmount) public {
         // send some rewards to the vault using the receive function
         payable(address(vault)).call{value: rewardAmount}("");
     }
 
-
     function testDepostLiner(uint256 amount) public {
-        
+
+
         amount = bound(amount, 1e5, type(uint96).max);
 
         vm.startPrank(user);
@@ -56,17 +53,14 @@ contract RebaseTokenTest is Test {
         uint256 endBalance = rebaseToken.balanceOf(user);
         assertGt(endBalance, middleBalance);
 
-
-
-       assertApproxEqAbs(endBalance-middleBalance, middleBalance-startBalance , 1);
+        assertApproxEqAbs(endBalance - middleBalance, middleBalance - startBalance, 1);
 
         vm.stopPrank();
-
     }
 
     function testRedeemStraight(uint256 _amount) public {
         _amount = bound(_amount, 1e5, type(uint96).max);
-          // Deposit funds
+        // Deposit funds
         vm.startPrank(user);
         vm.deal(user, _amount);
         vault.deposit{value: _amount}();
@@ -81,7 +75,7 @@ contract RebaseTokenTest is Test {
     }
 
     function testRedeemAfterTimePassed(uint256 depositAmount, uint256 time) public {
-         time = bound(time, 1000, type(uint96).max); // this is a crazy number of years - 2^96 seconds is a lot
+        time = bound(time, 1000, type(uint96).max); // this is a crazy number of years - 2^96 seconds is a lot
         depositAmount = bound(depositAmount, 1e5, type(uint96).max); // this is an Ether value of max 2^78 which is crazy
 
         // Deposit funds
@@ -110,7 +104,7 @@ contract RebaseTokenTest is Test {
         assertGt(balance, depositAmount);
     }
 
-     function testTransfer(uint256 amount, uint256 amountToSend) public {
+    function testTransfer(uint256 amount, uint256 amountToSend) public {
         amount = bound(amount, 1e5 + 1e3, type(uint96).max);
         amountToSend = bound(amountToSend, 1e5, amount - 1e3);
 
@@ -151,14 +145,13 @@ contract RebaseTokenTest is Test {
         assertGt(userTwoBalanceAfterWarp, userTwoBalancAfterTransfer);
     }
 
-function testCannotSetIntrestRate(uint256 newIntrestrate) public {
-    vm.prank(user);
-    vm.expectRevert();
-    rebaseToken.setInterestRate(newIntrestrate);
+    function testCannotSetIntrestRate(uint256 newIntrestrate) public {
+        vm.prank(user);
+        vm.expectRevert();
+        rebaseToken.setInterestRate(newIntrestrate);
+    }
 
-}
-
- function testCannotCallMint() public {
+    function testCannotCallMint() public {
         // Deposit funds
         vm.startPrank(user);
         uint256 interestRate = rebaseToken.getInterestRate();
@@ -175,22 +168,18 @@ function testCannotSetIntrestRate(uint256 newIntrestrate) public {
         vm.stopPrank();
     }
 
-function testGetPrincipleAmount(uint256 amount) public {
-    amount = bound(amount, 1e5, type(uint96).max);
-    vm.deal(user, amount);
-    vm.prank(user);
-    vault.deposit{value: amount}();
-    assertEq(rebaseToken.principalBalanceOf(user), amount);
+    function testGetPrincipleAmount(uint256 amount) public {
+        amount = bound(amount, 1e5, type(uint96).max);
+        vm.deal(user, amount);
+        vm.prank(user);
+        vault.deposit{value: amount}();
+        assertEq(rebaseToken.principalBalanceOf(user), amount);
 
-    vm.warp(block.timestamp + 1 hours);
-    assertEq(rebaseToken.principalBalanceOf(user), amount);
-}
+        vm.warp(block.timestamp + 1 hours);
+        assertEq(rebaseToken.principalBalanceOf(user), amount);
+    }
 
-
-function testGetRebaseTokenAddress() public view {
-    assertEq(vault.getRebaseTokenAddress(), address(rebaseToken));
-}
-
-
-
+    function testGetRebaseTokenAddress() public view {
+        assertEq(vault.getRebaseTokenAddress(), address(rebaseToken));
+    }
 }

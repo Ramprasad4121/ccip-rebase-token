@@ -1,142 +1,199 @@
-#  ccip-rebase-token
+# CCIP Rebase Token
 
-## Requirements
+<!-- <div align="center">
+  <a href="https://github.com/Ramprasad4121/ccip-rebase-token">
+    <img src="docs/images/ccip-banner.png" alt="CCIP Rebase Token Banner" width="600" height="300">
+  </a>
+</div> -->
 
-- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-  - You'll know you did it right if you can run `git --version` and you see a response like `git version x.x.x`
-- [foundry](https://getfoundry.sh/)
-  - You'll know you did it right if you can run `forge --version` and you see a response like `forge 0.2.0 (816e00b 2023-03-16T00:05:26.396218Z)`
+<div align="center">
+  Cross-Chain Rebase Token with Chainlink CCIP
+  <br />
+  <a href="#about"><strong>Explore the demo »</strong></a>
+  <br />
+  <br />
+  <a href="https://github.com/Ramprasad4121/ccip-rebase-token/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
+  ·
+  <a href="https://github.com/Ramprasad4121/ccip-rebase-token/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
+  ·
+  <a href="https://github.com/Ramprasad4121/ccip-rebase-token/issues/new?assignees=&labels=question&template=04_SUPPORT_QUESTION.md&title=support%3A+">Ask a Question</a>
+</div>
 
-## Quickstart
+<div align="center">
+<br />
 
-```
-git clone https://github.com/Ramprasad4121/ccip-rebase-token.git
-cd ccip-rebase-token
-forge build
-```
+[![Solidity](https://img.shields.io/badge/Solidity-^0.8.20-blue)](https://soliditylang.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-# Updates
+</div>
 
-# Usage
+<details open="open">
+<summary>Table of Contents</summary>
 
-## Start a local node
+- [CCIP Rebase Token](#ccip-rebase-token)
+  - [About](#about)
+    - [Built With](#built-with)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+  - [Usage](#usage)
+    - [Local Development](#local-development)
+    - [Testnet (Sepolia)](#testnet-sepolia)
+    - [Interactions](#interactions)
+    - [Testing](#testing)
+    - [Other Commands](#other-commands)
+  - [Roadmap](#roadmap)
+  - [Support](#support)
+  - [Project Assistance](#project-assistance)
+  - [Contributing](#contributing)
+  - [Authors \& Contributors](#authors--contributors)
+  - [Security](#security)
+  - [License](#license)
+  - [Acknowledgements](#acknowledgements)
 
-```
-make anvil
-```
+</details>
 
-## Deploy
+---
 
-This will default to your local node. You need to have it running in another terminal in order for it to deploy.
+## About
 
-```
-make deploy
-```
+Cross-chain rebase token integrating Chainlink CCIP for bridging. Features elastic supply with discrete decreasing interest rates (static post-bridge), rewards for early/L2 users. Deposits/withdrawals on L1 only; bridging pauses interest but requires repayment on return. Built with Foundry for testing and deployment.
 
-## Deploy - Other Network
+Why this? To enable secure, rewarding cross-chain tokenization with persistent user rates.
 
-[See below](#deployment-to-a-testnet-or-mainnet)
+<!-- <details>
+<summary>Screenshots</summary>
+<br>
 
-## Testing
+|                               Local Deployment Console                               |                               Deposit Transaction                               |
+| :-------------------------------------------------------------------: | :--------------------------------------------------------------------: |
+| <img src="docs/images/deploy-local.png" title="Anvil Deployment" width="100%"> | <img src="docs/images/deposit-tx.png" title="ETH Deposit" width="100%"> |
 
-We talk about 4 test tiers on Updraft:
+> Add screenshots of `make deploy` and `cast send deposit()`.
 
-1. Unit
-2. Integration
-3. Forked
-4. Staging
+</details> -->
 
-In this repo we cover #1 and Fuzzing.
+### Built With
 
-```
-forge test
-```
+- [Foundry](https://book.getfoundry.sh/) – Forge, Cast, Anvil
+- [Chainlink CCIP](https://chain.link/cross-chain) – Bridging
+- Solidity ^0.8.20
+- [Make](https://www.gnu.org/software/make/) – Automation
 
-### Testing Coverage
+## Getting Started
 
-```
-forge coverage
-```
+### Prerequisites
 
-and for coverage based testing:
+- Git (`git --version`)
+- Foundry (`curl -L https://foundry.paradigm.xyz | bash && foundryup`; `forge --version`)
 
-```
-forge coverage --report debug
-```
+### Installation
 
-# Deployment to a testnet or mainnet
+1. Clone:
+   ```bash
+   git clone https://github.com/Ramprasad4121/ccip-rebase-token.git
+   cd ccip-rebase-token
+   ```
 
-1. Setup environment variables
+2. Build:
+   ```bash
+   forge build
+   ```
 
-You'll want to set your `SEPOLIA_RPC_URL` and `PRIVATE_KEY` as environment variables. You can add them to a `.env` file, similar to what you see in `.env.example`.
+3. Setup `.env` from `.env.example`: Add `SEPOLIA_RPC_URL`, `PRIVATE_KEY` (test only), `ETHERSCAN_API_KEY` (optional).
 
-- `PRIVATE_KEY`: The private key of your account (like from [metamask](https://metamask.io/)). **NOTE:** FOR DEVELOPMENT, PLEASE USE A KEY THAT DOESN'T HAVE ANY REAL FUNDS ASSOCIATED WITH IT.
-  - You can [learn how to export it here](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-Export-an-Account-Private-Key).
-- `SEPOLIA_RPC_URL`: This is url of the sepolia testnet node you're working with. You can get setup with one for free from [Alchemy](https://alchemy.com/?a=673c802981)
+## Usage
 
-Optionally, add your `ETHERSCAN_API_KEY` if you want to verify your contract on [Etherscan](https://etherscan.io/).
+### Local Development
 
-1. Get testnet ETH
+- Start Anvil:
+  ```bash
+  make anvil
+  ```
 
-Head over to [faucets.chain.link](https://faucets.chain.link/) and get some testnet ETH. You should see the ETH show up in your metamask.
+- Deploy:
+  ```bash
+  make deploy
+  ```
 
-2. Deploy
+### Testnet (Sepolia)
 
-```
-make deploy ARGS="--network sepolia"
-```
+1. Fund: [Chainlink Faucet](https://faucets.chain.link/).
+2. Deploy:
+   ```bash
+   make deploy ARGS="--network sepolia"
+   ```
 
-## Scripts
+### Interactions
 
-Instead of scripts, we can directly use the `cast` command to interact with the contract.
+- Deposit ETH for tokens:
+  ```bash
+  cast send <VAULT_ADDRESS> "deposit()" --value 0.1ether --private-key $PRIVATE_KEY --rpc-url $SEPOLIA_RPC_URL
+  ```
 
-For example, on Sepolia:
+- Redeem tokens for ETH:
+  ```bash
+  cast send <VAULT_ADDRESS> "redeem(uint256)" <AMOUNT> --private-key $PRIVATE_KEY --rpc-url $SEPOLIA_RPC_URL
+  ```
 
-1. Get some RebaseTokens
+### Testing
 
-```
-cast send <vault-contract-address> "deposit()" --value 0.1ether --rpc-url $SEPOLIA_RPC_URL --wallet
-```
+- Unit/Fuzz:
+  ```bash
+  forge test
+  ```
 
-2. Redeem RebaseTokens for ETH
+- Coverage:
+  ```bash
+  forge coverage --report lcov
+  ```
 
-```
-cast send <vault-contractaddress> "redeem(uint256)" 10000000000000000 --rpc-url $SEPOLIA_RPC_URL --wallet
-```
+### Other Commands
 
-## Estimate gas
+- Gas snapshot: `forge snapshot`
+- Format: `forge fmt`
+- Clean: `make clean`
 
-You can estimate how much gas things cost by running:
+## Roadmap
 
-```
-forge snapshot
-```
+[Open issues](https://github.com/Ramprasad4121/ccip-rebase-token/issues).
 
-And you'll see an output file called `.gas-snapshot`
+- Enhancements: Multi-asset collateral, oracles
+- Bugs: Vote with 👍
 
-# Formatting
+Future: Mainnet, frontend.
 
-To run code formatting:
+## Support
 
-```
-forge fmt
-```
+- [Issues](https://github.com/Ramprasad4121/ccip-rebase-token/issues/new?assignees=&labels=question&template=04_SUPPORT_QUESTION.md&title=support%3A+)
+- [X](https://x.com/0xramprasad)
 
-# Thank you!
+## Project Assistance
 
-## Project design and assumptions
+- ⭐ [Star](https://github.com/Ramprasad4121/ccip-rebase-token)
+- Tweet: "#CCIP #RebaseToken"
+- Blog: [Dev.to](https://dev.to/)
 
-WHATEVER INTEREST THEY DEPOSIT WITH, THEY STICK WITH
+## Contributing
 
-This project is a cross-chain rebase token that integrates Chainlink CCIP to enable users to bridge their tokens cross-chain
+Fork, branch (`git checkout -b feature/xyz`), commit, PR. See [CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
-### NOTES
+## Authors & Contributors
 
-- assumed rewards are in contract
-- Protocol rewards early users and users which bridge to the L2
-  - The interest rate decreases discretely
-  - The interest rate when a user bridges is bridges with them and stays static. So, by bridging you get to keep your high interest rate.
-- You can only deposit and withdraw on the L1.
-- You cannot earn interest in the time while bridging.
+- [Ramprasad4121](https://github.com/Ramprasad4121)
 
-Don't forget to bridge back the amount of interest they accrued on the destination chain in that time
+[Contributors](https://github.com/Ramprasad4121/ccip-rebase-token/contributors)
+
+## Security
+
+Audit before prod. Report: [SECURITY.md](docs/SECURITY.md). "As is."
+
+## License
+
+MIT License. See [LICENSE](LICENSE).
+
+## Acknowledgements
+
+- [Chainlink](https://chain.link/) – CCIP
+- [Foundry](https://getfoundry.sh/) – Toolkit
+- Ethereum community.

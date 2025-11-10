@@ -9,10 +9,6 @@ remappings = [
 '@chainlink-local/=lib/chainlink-local/',
 ]
 
-rpc_endpoints = { 
-    eth = "https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY", 
-    arb = "https://arb-sepolia.g.alchemy.com/v2/YOUR_KEY",
-     zksync = "https://sepolia.era.YOUR_KEY"}
 
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

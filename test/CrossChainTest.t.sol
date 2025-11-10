@@ -5,7 +5,9 @@ import {console, Test} from "forge-std/Test.sol";
 
 import {CCIPLocalSimulatorFork, Register} from "@chainlink-local/src/ccip/CCIPLocalSimulatorFork.sol";
 import {TokenPool} from "@ccip/contracts/src/v0.8/ccip/pools/TokenPool.sol";
-import {RegistryModuleOwnerCustom} from "@ccip/contracts/src/v0.8/ccip/tokenAdminRegistry/RegistryModuleOwnerCustom.sol";
+import {
+    RegistryModuleOwnerCustom
+} from "@ccip/contracts/src/v0.8/ccip/tokenAdminRegistry/RegistryModuleOwnerCustom.sol";
 import {TokenAdminRegistry} from "@ccip/contracts/src/v0.8/ccip/tokenAdminRegistry/TokenAdminRegistry.sol";
 import {RateLimiter} from "@ccip/contracts/src/v0.8/ccip/libraries/RateLimiter.sol";
 import {IERC20} from "@ccip/contracts/src/v0.8/vendor/openzeppelin-solidity/v4.8.3/contracts/token/ERC20/IERC20.sol";
@@ -81,7 +83,7 @@ contract CrossChainTest is Test {
             sepoliaNetworkDetails.routerAddress
         );
         // deploy the vault
-        vault = new Vault(address(sourceRebaseToken));        // add rewards to the vault
+        vault = new Vault(address(sourceRebaseToken)); // add rewards to the vault
         vm.deal(address(vault), 1e18);
         // Set pool on the token contract for permissions on Sepolia
         sourceRebaseToken.grantMintAndBurnRole(address(sourcePool));
@@ -128,7 +130,7 @@ contract CrossChainTest is Test {
         vm.stopPrank();
     }
 
-   function configureTokenPool(
+    function configureTokenPool(
         uint256 fork,
         TokenPool localPool,
         TokenPool remotePool,
@@ -146,7 +148,7 @@ contract CrossChainTest is Test {
             outboundRateLimiterConfig: RateLimiter.Config({isEnabled: false, capacity: 0, rate: 0}),
             inboundRateLimiterConfig: RateLimiter.Config({isEnabled: false, capacity: 0, rate: 0})
         });
-        localPool.applyChainUpdates(chains);  // Only pass the chains array
+        localPool.applyChainUpdates(chains); // Only pass the chains array
         vm.stopPrank();
     }
 
@@ -183,10 +185,11 @@ contract CrossChainTest is Test {
             alice, IRouterClient(localNetworkDetails.routerAddress).getFee(remoteNetworkDetails.chainSelector, message)
         );
         vm.startPrank(alice);
-        IERC20(localNetworkDetails.linkAddress).approve(
-            localNetworkDetails.routerAddress,
-            IRouterClient(localNetworkDetails.routerAddress).getFee(remoteNetworkDetails.chainSelector, message)
-        ); // Approve the fee
+        IERC20(localNetworkDetails.linkAddress)
+            .approve(
+                localNetworkDetails.routerAddress,
+                IRouterClient(localNetworkDetails.routerAddress).getFee(remoteNetworkDetails.chainSelector, message)
+            ); // Approve the fee
         // log the values before bridging
         uint256 balanceBeforeBridge = IERC20(address(localToken)).balanceOf(alice);
         console.log("Local balance before bridge: %d", balanceBeforeBridge);
