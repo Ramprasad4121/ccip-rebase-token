@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.24;
 
-import {IRebaseToken} from "./Interfaces/IRebaseToken.sol";
+import {IRebaseToken} from "./interfaces/IRebaseToken.sol";
 import {RebaseToken} from "./RebaseToken.sol";
 
 contract Vault {

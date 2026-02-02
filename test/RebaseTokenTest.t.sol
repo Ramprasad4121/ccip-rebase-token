@@ -8,7 +8,7 @@ import {Vault} from "../src/Vault.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
 
-import {IRebaseToken} from "../src/Interfaces/IRebaseToken.sol";
+import {IRebaseToken} from "../src/interfaces/IRebaseToken.sol";
 
 contract RebaseTokenTest is Test {
     RebaseToken private rebaseToken;
