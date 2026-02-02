@@ -34,8 +34,6 @@ contract RebaseTokenTest is Test {
     }
 
     function testDepostLiner(uint256 amount) public {
-
-
         amount = bound(amount, 1e5, type(uint96).max);
 
         vm.startPrank(user);
